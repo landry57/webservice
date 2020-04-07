@@ -110,7 +110,7 @@ class CarouselController extends ApiController
             $data->sub_title = $request->sub_title;
         }
         if ($request->has('is_active')) {
-            $data->is_active = $request->is_active;
+            $data->is_active = (int)$request->is_active;
         }
         $data->save();
         return $this->showOne($data);
@@ -128,6 +128,9 @@ class CarouselController extends ApiController
             $data = Carousel::find($id);
             if (!$data) {
                 return $this->errorResponse('Image not found by ID', 400);
+            }
+            if (Storage::exists($data['image'])) {
+                File::delete($data['image']);
             }
             $data->Delete();
             return $this->showOne($data);

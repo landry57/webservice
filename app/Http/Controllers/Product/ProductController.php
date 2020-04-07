@@ -45,8 +45,8 @@ class ProductController extends ApiController
             'sub_category_id' => 'required|integer'
         ]);
 
-        if($request->quantity){
-            $data['quantity'] =(int)$request->quantity;
+        if($request->code){
+            $data['code'] =(int)$request->code;
         }
         $data['status']=Product::AVAILABLE_PRODUCT; 
 
@@ -69,11 +69,11 @@ class ProductController extends ApiController
     public function show($id)
     {
         try {
-            $res = Product::find($id);
+            $res = Product::where('id','=',$id)->with('imageprincipale','children')->get();
             if (!$res) {
                 return $this->errorResponse('Product not found by ID', 400);
             }
-            return $this->showOne($res);
+            return response()->json(['data'=>$res],200);
         } catch (Exception $e) {
             return $this->errorResponse('Product not found by ID', 400);
         }  //
@@ -101,8 +101,8 @@ class ProductController extends ApiController
         if ($request->has('name')) {
             $data->name = $request->name;
         }
-        if ($request->has('quantity')) {
-            $data->quantity = $request->quantity;
+        if ($request->has('code')) {
+            $data->code = $request->code;
         }
 
         if ($request->has('description')) {

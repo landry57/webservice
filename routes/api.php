@@ -36,6 +36,8 @@ Route::group(['prefix' => 'v1', 'as' => 'v1'], function () {
      */
     Route::resource('products', 'Product\ProductController', ['only' => ['index', 'show']]);
 
+    Route::resource('secteur', 'Secteur\SecteurController', ['only' => ['index', 'show']]);
+
     /**
      * carousel
      */
@@ -83,7 +85,7 @@ Route::group(['prefix' => 'v1/', 'middleware' => 'auth:api'], function () {
     /**
      * sub_Categories
      */
-    Route::resource('subcategories', 'Category\CategoryController', ['only' => ['store', 'update', 'destroy']]);
+    Route::resource('subcategories', 'Sub_category\Sub_categoryController', ['only' => ['store', 'update', 'destroy']]);
 
     /**
      * Products
@@ -115,6 +117,8 @@ Route::group(['prefix' => 'v1/', 'middleware' => 'auth:api'], function () {
      */
     Route::resource('imagep', 'Image_p\Image_pController', ['only' => ['store', 'update', 'destroy']]);
     Route::resource('images', 'Image_s\Image_sController', ['only' => ['store', 'update', 'destroy']]);
+     
+    Route::resource('secteur', 'Secteur\SecteurController', ['only' => ['store', 'update', 'destroy']]);
 
 
      //logout

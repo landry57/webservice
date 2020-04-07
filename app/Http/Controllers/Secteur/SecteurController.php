@@ -1,32 +1,31 @@
 <?php
 
-namespace App\Http\Controllers\Sub_category;
+namespace App\Http\Controllers\Secteur;
 
 use App\Http\Controllers\ApiController;
-use App\Http\Controllers\Controller;
-use App\Sub_category;
+use App\Secteur;
 use Exception;
 use Illuminate\Http\Request;
 
-class Sub_categoryController extends ApiController
+class SecteurController extends ApiController
 {
-    /**
+       /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
     public function index()
     {
-        $categories = Sub_category::with('parent')->get();
+        $secteurs = Secteur::all();
+       
 
-
-        if (!$categories) {
-            return $this->respondNotFound('Categories does not exists');
+        if (!$secteurs) {
+            return $this->respondNotFound('secteur does not exists');
         }
-        return $this->showAll($categories);
+        return $this->showAll($secteurs);
     }
 
-
+  
 
     /**
      * Store a newly created resource in storage.
@@ -37,11 +36,11 @@ class Sub_categoryController extends ApiController
     public function store(Request $request)
     {
         $data = $request->validate([
-            'title' => 'required|string|unique:sub_categories',
-            'category_id'=>'required|integer'
-        ]);
-        $res = Sub_category::create($data);
-        return $this->showOne($res, 201);
+            'name' => 'required|string|unique:secteurs',
+            'montant' => 'required|integer',
+            ]);
+        $res = Secteur::create($data);
+        return $this->showOne($res,201); 
     }
 
     /**
@@ -52,16 +51,19 @@ class Sub_categoryController extends ApiController
      */
     public function show($id)
     {
-
-        $categories = Sub_category::with('parent')->find($id);
-
-        if (!$categories) {
+        
+            $categories = Secteur::findOrFail($id);
+        
+        if(!$categories)
+        {
             return $this->errorResponse('Not Found!', 404);
         }
-
+           
         return $this->showOne($categories);
+    
     }
-    /**
+
+     /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
@@ -70,7 +72,7 @@ class Sub_categoryController extends ApiController
      */
     public function update(Request $request, $id)
     {
-        $data = Sub_category::findOrFail($id);
+        $data = Secteur::findOrFail($id);
 
         if ($data->isDirty()) {
             return  $this->errorResponse('Bad request', 400);
@@ -78,15 +80,20 @@ class Sub_categoryController extends ApiController
         if (!$request) {
             return  $this->errorResponse('You need to specify a different value to update', 422);
         }
-
-        if ($request->has('title')) {
+      
+        if ($request->has('name')) {
             $data->name = $request->name;
         }
-
+        if ($request->has('montant')) {
+            $data->montant = $request->montant;
+        }
+       
         $data->save();
         return $this->showOne($data);
     }
 
+
+   
     /**
      * Remove the specified resource from storage.
      *
@@ -94,15 +101,15 @@ class Sub_categoryController extends ApiController
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)
-    {
+    { 
         try {
-            $data = Sub_category::find($id);
-            if (!$data) {
-                return $this->errorResponse('Category not found by ID', 400);
-            }
-            $data->Delete();
-            return $this->showOne($data);
-        } catch (Exception $e) {
+        $data = Secteur::find($id);
+        if (!$data) {
+            return $this->errorResponse('secteur not found by ID', 400);
         }
+        $data->Delete();
+        return $this->showOne($data);
+    } catch (Exception $e) {
+    }
     }
 }

@@ -19,7 +19,8 @@ class Transaction extends Model
         'quantity',
         'status',
         'product_id',
-        'buyer_id',    
+        'buyer_id',  
+        'secteur_id'  
     ];
 
     public function isDelivre()
@@ -31,6 +32,12 @@ class Transaction extends Model
     {
      return $this->belongsTo(Buyer::class);
     }
+
+    public function secteur()
+    {
+     return $this->belongsTo(Secteur::class);
+    }
+
 
     
     public function product()

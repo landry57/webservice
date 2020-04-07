@@ -12,6 +12,7 @@ class Sub_category extends Model
     protected $dates =['deleted_at']; 
     protected $fillable= [
         'title',
+        'category_id'
     ];
 
     public function products()

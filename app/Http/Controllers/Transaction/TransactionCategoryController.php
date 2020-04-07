@@ -15,7 +15,7 @@ class TransactionCategoryController extends ApiController
      */
     public function index(Transaction $transaction)
     {
-       $sub_category = $transaction->product()->with('sub_categories')->get();
+       $sub_category = $transaction->product()->with('sub_categories','secteur')->get();
        return response()->json($sub_category);
     }
 

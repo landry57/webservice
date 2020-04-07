@@ -21,7 +21,7 @@ class TransactionController extends ApiController
     {
         try
         {
-            $buyers = Transaction::with('product','buyer','image')
+            $buyers = Transaction::with('product','secteur','buyer','image')
             ->get()
             ;
            
@@ -49,7 +49,8 @@ class TransactionController extends ApiController
             'quantity' => 'required|integer',
             'buyer_id' => 'required|integer',
             'product_id' => 'required|integer',
-            'buyer_id' => 'required|integer'
+            'buyer_id' => 'required|integer',
+            'secteur_id' => 'required|integer'
         ]);
         $data['status'] = Transaction::UNDELIVRE;
        
@@ -111,6 +112,10 @@ class TransactionController extends ApiController
             if ($request->has('quantity')) {
             $data->quantity = (int)$request->quantity;
             }
+
+            if ($request->has('secteur_id')) {
+                $data->secteur_id = (int)$request->secteur_id;
+                }
         if (!$data) {
           return  $this->errorResponse('You need to specify a different value to update', 422);
         }
@@ -132,7 +137,7 @@ class TransactionController extends ApiController
         $data = Transaction::find($id);
 
         if(!$data){
-            throw new ModelNotFoundException('User not found by ID');
+            throw new ModelNotFoundException('Transaction not found by ID');
       
         }
         
