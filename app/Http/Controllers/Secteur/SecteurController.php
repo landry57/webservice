@@ -37,8 +37,10 @@ class SecteurController extends ApiController
     {
         $data = $request->validate([
             'name' => 'required|string|unique:secteurs',
-            'montant' => 'required|integer',
             ]);
+            if($request->montant){
+                $data['montant'] =(int)$request->montant;
+            }
         $res = Secteur::create($data);
         return $this->showOne($res,201); 
     }

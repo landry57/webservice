@@ -50,7 +50,8 @@ class TransactionController extends ApiController
             'buyer_id' => 'required|integer',
             'product_id' => 'required|integer',
             'buyer_id' => 'required|integer',
-            'secteur_id' => 'required|integer'
+            'secteur_id' => 'required|integer',
+            'sub_category_id'=>'required|integer'
         ]);
         $data['status'] = Transaction::UNDELIVRE;
        
@@ -80,7 +81,7 @@ class TransactionController extends ApiController
     {
         try
         {
-            $buyers = Transaction::with('product','buyer','image')
+            $buyers = Transaction::with('product','secteur','buyer','image')
             ->get()
             ->where('buyer.id','=',$id);
            

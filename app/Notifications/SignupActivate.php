@@ -41,12 +41,12 @@ class SignupActivate extends Notification
     public function toMail($notifiable)
     {
        
-    $url = url('/api/auth/signup/activate/'.$notifiable->activation_token);
+    $url = url('http://localhost/webyeti/register/activate/'.$notifiable->activation_token);
     return (new MailMessage)
       ->greeting('Salut!')
         ->subject('Confirmez votre compte')
         ->line('Merci pour votre inscription! Veuillez avant de commencer, confirmer votre compte.')
-        ->action('Confirm Account', url($url))
+        ->action('Confirmer le compte', url($url))
         ->line('Thank you for using our application!');
     }
 

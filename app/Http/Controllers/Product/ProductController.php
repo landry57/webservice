@@ -38,6 +38,7 @@ class ProductController extends ApiController
     {
         $data = $request->validate([
             'name' => 'required|string|unique:products',
+            'code' => 'required|integer|unique:products',
             'description' => 'required|string',
             'price' => 'required|integer',
             'solde' => 'required|integer',
@@ -89,6 +90,7 @@ class ProductController extends ApiController
      */
     public function update(Request $request, $id)
     {
+        try {
         $data = Product::findOrFail($id);
 
         if ($data->isDirty()) {
@@ -102,7 +104,7 @@ class ProductController extends ApiController
             $data->name = $request->name;
         }
         if ($request->has('code')) {
-            $data->code = $request->code;
+            $data->code = (int)$request->code;
         }
 
         if ($request->has('description')) {
@@ -121,9 +123,13 @@ class ProductController extends ApiController
         if ($request->has('seller_id')) {
             $data->seller_id = (int)$request->seller_id;
         }
-    
-        $data->save();
-        return $this->showOne($data);
+     
+           $data->save();
+           return $this->showOne($data);
+       }catch(Exception $e){
+        return  $this->errorResponse('Bad request', 400);
+       }
+       
     }
 
     /**
