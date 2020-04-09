@@ -108,36 +108,21 @@ class UserController extends ApiController
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit(Request $request,$id)
+    public function update(Request $request,$id)
     {
         $data = User::findOrFail($id);
 
-        if($request->file('image')) {
-            try {
-   
-                $path = $request->file('image'); // Get file
-
-                // Get the image and convert into string 
-                $img = file_get_contents($request->file('image'));
-    
-                // Encode the image string data into base64 
-                $fileName = base64_encode($img);
-                $data->image= $fileName;
-
-
-            } catch (Exception $e) {
-                echo "catch";
-
-            }
-        }
+      
        
 
           if ($request->has('email')) {
             $data->email = $request->email;
           }
-    
-          if ($request->has('password')) {
-            $data->password = $request->password;
+          if ($request->has('phone')) {
+            $data->phone = $request->phone;
+          }
+          if ($request->has('name')) {
+            $data->name = $request->name;
           }
 
           
@@ -150,18 +135,7 @@ class UserController extends ApiController
           return $this->showOne($data);
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
+ 
     /**
      * Remove the specified resource from storage.
      *
@@ -210,9 +184,10 @@ class UserController extends ApiController
         if ($request->remember_me)
             $token->expires_at = Carbon::now()->addWeeks(1);
         $token->save();
-        return response()->json(['datat'=>[
+        return response()->json(['data'=>[
             'access_token' => $tokenResult->accessToken,
             'id'=>$user['id'],
+            'name'=>$user['name'],
             'token_type' => 'Bearer',
             'expires_at' => Carbon::parse($tokenResult->token->expires_at)->toDateTimeString()
         ]],200);
@@ -253,21 +228,28 @@ public function change_password(Request $request)
     $userid = Auth::guard('api')->user()->id;
     $rules = array(
         'old_password' => 'required',
-        'new_password' => 'required|min:6',
+        'new_password' => 'required',
         'confirm_password' => 'required|same:new_password',
     );
     $validator = Validator::make($input, $rules);
     if ($validator->fails()) {
-        $arr = array("status" => 400, "message" => $validator->errors()->first(), "data" => array());
+        $arr = array("message" => $validator->errors()->first());
+        return Response()->json($arr,400);
+    
     } else {
         try {
             if ((Hash::check(request('old_password'), Auth::user()->password)) == false) {
-                $arr = array("status" => 400, "message" => "Check your old password.", "data" => array());
+                $arr = array("message" => "Check your old password.");
+                return Response()->json($arr,400);
             } else if ((Hash::check(request('new_password'), Auth::user()->password)) == true) {
-                $arr = array("status" => 400, "message" => "Please enter a password which is not similar then current password.", "data" => array());
+                $arr = array("message" => "Please enter a password which is not similar then current password.");
+                return Response()->json($arr,400);
+                
             } else {
                 User::where('id', $userid)->update(['password' => Hash::make($input['new_password'])]);
-                $arr = array("status" => 200, "message" => "Password updated successfully.", "data" => array());
+                
+                $arr = array("message" => "Password updated successfully.");
+                return Response()->json($arr,200);
             }
         } catch (\Exception $ex) {
             if (isset($ex->errorInfo[2])) {
@@ -275,10 +257,11 @@ public function change_password(Request $request)
             } else {
                 $msg = $ex->getMessage();
             }
-            $arr = array("status" => 400, "message" => $msg, "data" => array());
+            $arr = array("message" => $msg);
+            return Response()->json($arr,400);
         }
     }
-    return Response()->json($arr);
+   
 }
 
 }

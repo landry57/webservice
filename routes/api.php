@@ -69,7 +69,7 @@ Route::group(['prefix' => 'v1/', 'middleware' => 'auth:api'], function () {
     /**
      * user
      */
-    Route::resource('users', 'User\UserController', ['only' => ['destroy', 'index', 'show']]);
+    Route::resource('users', 'User\UserController', ['only' => ['destroy', 'index', 'show','update']]);
     /**
      * Buyers
      */

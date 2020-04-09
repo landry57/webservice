@@ -38,7 +38,7 @@ class PasswordResetRequest extends Notification
      */
      public function toMail($notifiable)
      {
-        $url = url('/api/password/find/'.$this->token);
+        $url = url('http://localhost/webyeti/login/find/'.$this->token);
         return (new MailMessage)
            ->greeting('Salut!')
             ->line('Vous recevez cet e-mail, car nous avons reçu une demande de réinitialisation de mot de passe pour votre compte.')

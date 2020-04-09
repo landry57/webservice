@@ -70,7 +70,7 @@ class ForgotPassword extends ApiController
                 'message' => 'This password reset token is invalid.'
             ], 404);
         }
-        return response()->json($passwordReset);
+        return response()->json(['data'=>$passwordReset],200);
     }
      /**
      * Reset password
@@ -106,7 +106,7 @@ class ForgotPassword extends ApiController
         $user->save();
         $passwordReset->delete();
         $user->notify(new PasswordResetSuccess($passwordReset));
-        return response()->json($user);
+        return response()->json(['data'=>$user],200);
     }
 
 
