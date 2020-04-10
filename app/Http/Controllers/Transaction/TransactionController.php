@@ -4,10 +4,13 @@ namespace App\Http\Controllers\Transaction;
 
 use App\Http\Controllers\ApiController;
 use App\Product_SubCategory;
+use App\Secteur;
 use App\Transaction;
+use App\User;
 use Exception;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class TransactionController extends ApiController
@@ -43,30 +46,63 @@ class TransactionController extends ApiController
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
-    {
+    {   
         
         $data = $request->validate([
-            'quantity' => 'required|integer',
-            'buyer_id' => 'required|integer',
-            'product_id' => 'required|integer',
-            'buyer_id' => 'required|integer',
-            'secteur_id' => 'required|integer',
-            'sub_category_id'=>'required|integer'
+           'order_detail'=>'required',
+           'lieu'=>'required'
         ]);
-        $data['status'] = Transaction::UNDELIVRE;
-       
-        try {
-            $res = Transaction::create($data);
-            DB::table('product_sub_category')->insert(
-                ['sub_category_id' => $request->sub_category_id, 'product_id' => $request->product_id]
-            );
-          
-        return response()->json(['data' => $res],201);
-        }catch(Exception $e){
-            echo $e;
+        //var_dump($data['order_detail']);
+        $userid = Auth::user()->id;
+        $idsecteur=(int)$data['lieu'][0]['id'];
+        $lieu =$data['lieu'][0];
+        $orderd=$data['order_detail'];
+        $total_price=0;
+        $res=[];
+        foreach($data['order_detail'] as $order){
+        $total_price += ($order["solde"] *(int)$order["quantity"]);
+         $data['quantity']=(int)$order['quantity'];
+         $data['product_id']=(int)$order['id'];
+         $data['secteur_id']=$idsecteur;
+         $data['sub_category_id']=(int)$order['sub_category_id'];
+         $data['buyer_id']=(int)$userid;
+         $data['status'] = Transaction::UNDELIVRE;
+         $res[] = Transaction::create($data);
+         DB::table('product_sub_category')->insert(
+            ['sub_category_id' => $data['sub_category_id'], 'product_id' =>$data['product_id']]
+        );
+         };
+        if(!$res){
             return $this->errorResponse('Bad request',400);
         }
-      
+         
+        //userinfo
+        $infouser = User::find($userid);
+        $inf=['name'=> $infouser['name'],'phone'=> $infouser['phone'],'email'=> $infouser['email']];
+        //send mail
+        
+        
+            $data =['name'=>'landry'];
+            $beautymail = app()->make(\Snowfire\Beautymail\Beautymail::class);
+            $beautymail->send('mail.commande', [
+                'customer_details'=> $lieu,
+                'user'=> $inf,
+                'total_price'=>$total_price,
+                'order_details'=>$orderd
+        ], function($message) 
+            {
+               
+                $email = 'landry.fof@gmail.com';
+                $message 
+                    ->from('info@yetibeautyhair.net')
+                    ->to($email)
+                    ->subject('Commande');
+            });
+
+        
+          
+        return response()->json(['data' => $res],201);
+       
 
        
     }

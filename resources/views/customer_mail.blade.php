@@ -4,20 +4,40 @@
 
 	@include('beautymail::templates.widgets.articleStart')
 
-		<h4 class="secondary"><strong>Hello World</strong></h4>
-		<p>This is a test</p>
-		    <div class="card">
+		<h4 class="secondary"><strong>{{$title}}</strong></h4>
+		<p>Detail</p>
+       <div style="width:100%; padding: 20px;">
+	   <table>
+		 <thead>
+		 <th>Reference Produit</th>
+		 <th>Quantite</th>
+		 <th>Total</th>
+		 <tr>
+		 </tr>
+		 </thead>
+		 <tbody>
+			 <tr>
+				 <td>7788888888</td>
+				 <td>4</td>
+				 <td>127899 fr</td>
+			 </tr>
+		 </tbody>
+		 </table>
+	   </div>
+		<p>{{$customer_details['name']}}</p>
+		<p>{{$customer_details['phone']}}</p>
+		<p>{{$customer_details['email']}}</p>
+		<div class="card">
 			<div class="card-header">
-			je suis le header
+				Produit commande
+
 			</div>
 			<div class="card-body">
-			je suis le <body>
-			</body>
-			<div class="card-footer">
-			je suis le footer
+			  <p>{{$order_details['SKU']}}</p>
+			  <p>{{$order_details['price']}}</p>
+			  <p>{{$order_details['order_date']}}</p>
 			</div>
-			</div>
-			</div>
+		</div>
 
 	@include('beautymail::templates.widgets.articleEnd')
 

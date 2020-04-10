@@ -24,13 +24,13 @@ return [
         'address'     => null,
 
         'logo'        => [
-            'path'   => '%PUBLIC%/images/product/20200402180749.png',
-            'width'  => '100',
-            'height' => '100',
+            'path'   => '',
+            'width'  => '',
+            'height' => '',
         ],
 
-        'twitter'  => 'justLaravel',
-        'facebook' => 'justLaravel',
+      
+        'facebook' => '',
       
     ],
 

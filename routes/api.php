@@ -54,7 +54,8 @@ Route::group(['prefix' => 'v1', 'as' => 'v1'], function () {
     Route::get('signup/activate/{token}', 'User\UserController@signupActivate');
    
     Route::get('sendmail', 'MailController@sendEmail');
-
+  
+    Route::get('customer','MailController@sendOrderEmail');
     //forgot password
     Route::post('create', 'Security\ForgotPassword@create');
     Route::get('find/{token}', 'Security\ForgotPassword@find');

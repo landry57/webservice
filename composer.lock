@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "13f5217aa9d56a44da63c230f7280e1a",
+    "content-hash": "ea5b06c8ce4b2278b83a7de0597c37b0",
     "packages": [
         {
             "name": "defuse/php-encryption",
@@ -676,6 +676,7 @@
                     "email": "jakub.onderka@gmail.com"
                 }
             ],
+            "abandoned": "php-parallel-lint/php-console-color",
             "time": "2018-09-29T17:23:10+00:00"
         },
         {
@@ -722,6 +723,7 @@
                 }
             ],
             "description": "Highlight PHP code in terminal",
+            "abandoned": "php-parallel-lint/php-console-highlighter",
             "time": "2018-09-29T18:48:56+00:00"
         },
         {
@@ -2627,7 +2629,7 @@
         },
         {
             "name": "snowfire/beautymail",
-            "version": "v1.1.2",
+            "version": "dev-master",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Snowfire/Beautymail.git",
@@ -6270,7 +6272,9 @@
     ],
     "aliases": [],
     "minimum-stability": "dev",
-    "stability-flags": [],
+    "stability-flags": {
+        "snowfire/beautymail": 20
+    },
     "prefer-stable": true,
     "prefer-lowest": false,
     "platform": {
