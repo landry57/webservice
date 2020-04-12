@@ -49,10 +49,9 @@ align-content: left;
   
   @include('beautymail::templates.ark.contentStart')
 
+
+<p>Commande éffectuée par </p>
 <h4 class="secondary"><strong>M/Mme {{$user['name']}},</strong></h4>
-<p>Merci de faire vos achats sur Yéti Beautyhair ! </p>
-<p>Votre commande a été confirmée avec succès.</p>
-<p>Elle sera emballée et expédiée dès que possible. Vous recevrez une notification de notre part dès que le(s) article(s) sera(seront) prêt(s) à être livré(s). </p>
 
 @include('beautymail::templates.ark.contentEnd')
 

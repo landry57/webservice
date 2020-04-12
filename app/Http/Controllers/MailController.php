@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Mail\SendMail;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
 
 class MailController extends Controller
@@ -32,36 +33,35 @@ class MailController extends Controller
       }
 
 
-    public function sendEMail(){
-		// $this->validate($request, [
-	    //     'email' => 'bail|required|email',
-        // ]);
-        $customer_details = [
-            'name' => 'Fofana landry',
-            'phone' => '+22557534697',
-            'email' => 'landry.fof@gmail.com'
+    public function sendEMail(Request $request){
+		$this->validate($request, [
+	        'tab' => 'required',
+        ]);
+        $this->emailfrom=$request['tab']['email'];
+        $tab = [
+            'name' => $request['tab']['name'],
+            'email' => $request['tab']['email'],
+            'subject'=>$request['tab']['subject'],
+            'message'=>$request['tab']['message']  
         ];
-        $order_details = [
-            
-            'pname' => 'zum',
-            'price' => '10000',
-            'quanty'=>'1',
-            
-        ];
-        $data =['name'=>'landry'];
+       
 		$beautymail = app()->make(\Snowfire\Beautymail\Beautymail::class);
-        $beautymail->send('mail.commande', [
-            'customer_details'=>$customer_details,
-            'order_details'=>$order_details
-    ], function($message) 
-	    {
+        $beautymail->send('contact', [
+            'tab'=>$tab
            
-	    	$email = 'landry.fof@gmail.com';
+    ], function($message) 
+        {   
+            $email = 'landry.fof@gmail.com';
 	        $message 
-				->from('info@yetibeautyhair.net')
+				->from($this->emailfrom)
 				->to($email)
-				->subject('Commande');
-	    });
-	   return response()->json(['message'=>'success']);
+				->subject('Contact');
+        });
+        
+        if (empty($sendmail)) {
+            return response()->json(['message' => 'Mail Sent Sucssfully'], 200);
+        }else{
+            return response()->json(['message' => 'Mail Sent fail'], 400);
+        }
 	}  
 }

@@ -80,7 +80,7 @@ class TransactionController extends ApiController
         $infouser = User::find($userid);
         $inf=['name'=> $infouser['name'],'phone'=> $infouser['phone'],'email'=> $infouser['email']];
         //send mail
-        
+          $this->userEmail =  $infouser['email'];
         
             $data =['name'=>'landry'];
             $beautymail = app()->make(\Snowfire\Beautymail\Beautymail::class);
@@ -92,7 +92,7 @@ class TransactionController extends ApiController
         ], function($message) 
             {
                
-                $email = 'landry.fof@gmail.com';
+                $email =  $this->userEmail;
                 $message 
                     ->from('info@yetibeautyhair.net')
                     ->to($email)
@@ -100,6 +100,27 @@ class TransactionController extends ApiController
             });
 
         
+            $inf=['name'=> $infouser['name'],'phone'=> $infouser['phone'],'email'=> $infouser['email']];
+            //send mail
+            
+            
+               
+                $beautymail = app()->make(\Snowfire\Beautymail\Beautymail::class);
+                $beautymail->send('mail.admin', [
+                    'customer_details'=> $lieu,
+                    'user'=> $inf,
+                    'total_price'=>$total_price,
+                    'order_details'=>$orderd
+            ], function($message) 
+                {
+                   
+                    $emailAD = 'landry.fof@gmail.com';
+                    $message 
+                        ->from('info@yetibeautyhair.net')
+                        ->to($emailAD)
+                        ->subject('Nouvelle Commande');
+                });
+    
           
         return response()->json(['data' => $res],201);
        
