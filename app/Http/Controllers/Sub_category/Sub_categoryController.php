@@ -17,7 +17,7 @@ class Sub_categoryController extends ApiController
      */
     public function index()
     {
-        $categories = Sub_category::with('parent')->get();
+        $categories = Sub_category::withTrashed()->with('parent')->get();
 
 
         if (!$categories) {
@@ -53,7 +53,7 @@ class Sub_categoryController extends ApiController
     public function show($id)
     {
 
-        $categories = Sub_category::with('parent')->find($id);
+        $categories = Sub_category::withTrashed()->with('parent')->find($id);
 
         if (!$categories) {
             return $this->errorResponse('Not Found!', 404);
@@ -70,7 +70,7 @@ class Sub_categoryController extends ApiController
      */
     public function update(Request $request, $id)
     {
-        $data = Sub_category::findOrFail($id);
+        $data = Sub_category::withTrashed()->findOrFail($id);
 
         if ($data->isDirty()) {
             return  $this->errorResponse('Bad request', 400);
@@ -80,7 +80,7 @@ class Sub_categoryController extends ApiController
         }
 
         if ($request->has('title')) {
-            $data->name = $request->name;
+            $data->title = $request->title;
         }
 
         $data->save();
@@ -96,7 +96,7 @@ class Sub_categoryController extends ApiController
     public function destroy($id)
     {
         try {
-            $data = Sub_category::find($id);
+            $data = Sub_category::withTrashed()->find($id);
             if (!$data) {
                 return $this->errorResponse('Category not found by ID', 400);
             }

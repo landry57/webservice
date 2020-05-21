@@ -33,13 +33,17 @@ class Image_pController extends ApiController
      */
     public function store(Request $request)
     {
-
+       
         $data = $request->validate([
-            'img' => 'required|file',
+            'img' => 'required|image|mimes:jpeg,png,jpg,gif',
             'product_id' => 'required|integer',
         ]);
 
-        if ($files = $request->file('img')) {
+       
+       
+        if ($request->has('img')) {
+           
+            $files = $request->file('img');
             $destinationPath = 'images/product/'; // upload path
             $profilefile = date('YmdHis') . "." . $files->getClientOriginalExtension();
             $files->move($destinationPath, $profilefile);
@@ -50,6 +54,7 @@ class Image_pController extends ApiController
 
             return response()->json(['data' => $res], 201);
         } catch (Exception $e) {
+           
             return $this->errorResponse('Bad request', 400);
         }
     }
@@ -69,6 +74,7 @@ class Image_pController extends ApiController
             }
             return $this->showOne($res);
         } catch (Exception $e) {
+           
             return $this->errorResponse('Image not found by ID', 400);
         }
     }
@@ -122,6 +128,9 @@ class Image_pController extends ApiController
             $data = Image_p::find($id);
             if (!$data) {
                 return $this->errorResponse('Image not found by ID', 400);
+            }
+            if (Storage::exists($data['img'])) {
+                File::delete($data['img']);
             }
             $data->Delete();
             return $this->showOne($data);

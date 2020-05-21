@@ -22,16 +22,19 @@ class ForgotPassword extends ApiController
      * @return [string] message
      */
     public function create(Request $request)
-    {
+    {   $url='';
         $request->validate([
             'email' => 'required|string|email',
         ]);
+        if($request->dash){
+            $url='http://d1815c57.ngrok.io/yetidash/login/find/';
+        }
         $user = User::where('email', $request->email)->first();
         if (!$user)
             return response()->json([
                 'message' => "We can't find a user with that e-mail address."
             ], 404);
-        $passwordReset = PasswordReset::updateOrCreate(
+          $passwordReset = PasswordReset::updateOrCreate(
             ['email' => $user->email],
            
             [
@@ -41,7 +44,7 @@ class ForgotPassword extends ApiController
         );
         if ($user && $passwordReset)
             $user->notify(
-                new PasswordResetRequest($passwordReset->token)
+                new PasswordResetRequest($passwordReset->token,$url)
             );
         return  response()->json([
             'message' => 'We have e-mailed your password reset link!'

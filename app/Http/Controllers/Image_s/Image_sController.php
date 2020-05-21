@@ -18,7 +18,7 @@ class Image_sController extends ApiController
      */
     public function index()
     {
-        $image = Image_s::with('product', 'scateg')->get();
+        $image = Image_s::all();
         return $this->showAll($image);
     }
 
@@ -120,9 +120,13 @@ class Image_sController extends ApiController
             if (!$data) {
                 return $this->errorResponse('Image not found by ID', 400);
             }
+            if (Storage::exists($data['imgs'])) {
+                File::delete($data['imgs']);
+            }
             $data->Delete();
             return $this->showOne($data);
         } catch (Exception $e) {
         }
     }
+ 
 }

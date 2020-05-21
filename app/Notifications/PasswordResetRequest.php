@@ -16,8 +16,8 @@ class PasswordResetRequest extends Notification
     *
     * @return void
     */
-    public function __construct($token)
-    {
+    public function __construct($token,$url='')
+    {   $this->url=$url;
         $this->token = $token;
     }
     /**
@@ -37,8 +37,13 @@ class PasswordResetRequest extends Notification
      * @return \Illuminate\Notifications\Messages\MailMessage
      */
      public function toMail($notifiable)
-     {
-        $url = url('http://localhost/webyeti/login/find/'.$this->token);
+     { 
+       $url="";  
+        if(!empty($this->url)){
+        $url =$this->url.$this->token;
+        }else{
+           $url = url('http://d1815c57.ngrok.io/yetiweb/login/find/'.$this->token);
+        }
         return (new MailMessage)
            ->greeting('Salut!')
             ->line('Vous recevez cet e-mail, car nous avons reçu une demande de réinitialisation de mot de passe pour votre compte.')

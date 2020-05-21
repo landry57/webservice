@@ -18,9 +18,9 @@ class CreateProductsTable extends Migration
             $table->increments('id');
             $table->string('name',60);
             $table->string('description',1000);
-            $table->bigInteger('code')->unsigned()->nullable();
+            $table->string('code',60)->nullable();
             $table->double('price')->unsigned();
-            $table->double('solde')->unsigned();
+            $table->double('solde')->unsigned()->nullable();
             $table->boolean('status')->default(Product::AVAILABLE_PRODUCT);
             $table->integer('saller_id')->unsigned();
             $table->integer('sub_category_id')->unsigned();

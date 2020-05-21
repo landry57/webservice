@@ -16,7 +16,7 @@ class SallerController extends ApiController
      */
     public function index()
     {
-        $buyers = Saller::has('products')->get();
+        $buyers = Saller::withTrashed()->has('products')->get();
         return $this->showAll($buyers);
     }
 
@@ -31,7 +31,7 @@ class SallerController extends ApiController
        
         try
          {
-             $buyers = Saller::with('products')->get();
+             $buyers = Saller::withTrashed()->with('products')->get();
               return $this->showOne($saller);
          }
         catch(ModelNotFoundException $e)

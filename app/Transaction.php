@@ -45,11 +45,7 @@ class Transaction extends Model
      return $this->belongsTo(Product::class);
     }
 
-      public function image()
-    {
-        return $this->hasOne(Image_p::class,'product_id');
-    }
-
+  
     public function trasact()
     {
         return $this->hasOne(Transaction::class);

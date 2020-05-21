@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Image_s extends Model
 {
-    use SoftDeletes;
+   // use SoftDeletes;
     protected $dates =['deleted_at'];
     protected $fillable= [
         'imgs',
@@ -19,6 +19,8 @@ class Image_s extends Model
     {
         return $this->hasOne(Image_p::class);
     }
+
+    
 
     public function scateg()
     {

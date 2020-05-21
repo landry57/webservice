@@ -14,6 +14,8 @@ use Illuminate\Mail\Message;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Password;
+use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 
 class UserController extends ApiController
@@ -50,15 +52,20 @@ class UserController extends ApiController
             'email' => 'required|email|unique:users',
             'password' => 'required|confirmed',
         ]);
-       
-        
+        $avatar='';
+        if ($files = $request->file('avatar')) {
+            $destinationPath = 'images/avatar/'; // upload path
+            $profilefile = date('YmdHis') . "." . $files->getClientOriginalExtension();
+            $files->move($destinationPath, $profilefile);
+            $avatar = $destinationPath . "$profilefile";
+        }
 
         $user = new User([
             'name' => $request->name,
             'email' => $request->email,
             'phone' => $request->phone,
             'admin' => User::REGULAR_USER,
-            'avatar' => 'avatar',
+            'avatar' =>  $avatar?$avatar:'avatar',
             'password' => bcrypt($request->password),
             'activation_token' => str_random(60)
         ]);
@@ -124,7 +131,18 @@ class UserController extends ApiController
           if ($request->has('name')) {
             $data->name = $request->name;
           }
+          
+          if ($files = $request->file('avatar')) {
+            if (Storage::exists($data->avatar)) {
+                File::delete($data->avatar);
+            }
 
+            $destinationPath = 'images/avatar/'; // upload path
+
+            $profilefile = date('YmdHis') . "." . $files->getClientOriginalExtension();
+            $files->move($destinationPath, $profilefile);
+            $data->avatar = $destinationPath . "$profilefile";
+        }
           
     
          
@@ -188,6 +206,8 @@ class UserController extends ApiController
             'access_token' => $tokenResult->accessToken,
             'id'=>$user['id'],
             'name'=>$user['name'],
+            'admin'=>$user['admin'],
+            'avatar'=>$user['avatar'],
             'token_type' => 'Bearer',
             'expires_at' => Carbon::parse($tokenResult->token->expires_at)->toDateTimeString()
         ]],200);

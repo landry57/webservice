@@ -19,7 +19,8 @@ class ProductController extends ApiController
     public function index()
     {
        
-        $categories = Product::with('imageprincipale','children')->get();
+        //$categories = Product::with('imageprincipale','children')->get();
+        $categories = Product::withTrashed()->with('imageprincipale','children')->get();
        
        
         if (!$categories) {
@@ -38,17 +39,17 @@ class ProductController extends ApiController
     {
         $data = $request->validate([
             'name' => 'required|string|unique:products',
-            'code' => 'required|integer|unique:products',
+            'code' => 'required|string|unique:products',
             'description' => 'required|string',
             'price' => 'required|integer',
-            'solde' => 'required|integer',
             'saller_id' => 'required|integer',
             'sub_category_id' => 'required|integer'
         ]);
 
-        if($request->code){
-            $data['code'] =(int)$request->code;
+        if($request->solde && !empty($request->solde)){
+            $data['solde'] =(int)$request->solde;
         }
+
         $data['status']=Product::AVAILABLE_PRODUCT; 
 
      
@@ -70,7 +71,8 @@ class ProductController extends ApiController
     public function show($id)
     {
         try {
-            $res = Product::where('id','=',$id)->with('imageprincipale','children')->get();
+            //$res = Product::where('id','=',$id)->with('imageprincipale','children')->get();
+            $res = Product::where('id',$id)->withTrashed()->with('imageprincipale','children')->get();
             if (!$res) {
                 return $this->errorResponse('Product not found by ID', 400);
             }
@@ -91,8 +93,8 @@ class ProductController extends ApiController
     public function update(Request $request, $id)
     {
         try {
-        $data = Product::findOrFail($id);
-
+        //$data = Product::findOrFail($id);
+        $data=Product::withTrashed()->find($id);
         if ($data->isDirty()) {
             return  $this->errorResponse('Bad request', 400);
         }
@@ -123,7 +125,10 @@ class ProductController extends ApiController
         if ($request->has('seller_id')) {
             $data->seller_id = (int)$request->seller_id;
         }
-     
+        if ($request->has('deleted_at')) {
+            $data->deleted_at =null;
+        }
+       
            $data->save();
            return $this->showOne($data);
        }catch(Exception $e){
@@ -142,10 +147,13 @@ class ProductController extends ApiController
     {
         try {
             $data = Product::find($id);
+            
             if (!$data) {
                 return $this->errorResponse('Product not found by ID', 400);
             }
+            
             $data->Delete();
+           
             return $this->showOne($data);
         } catch (Exception $e) {
         }

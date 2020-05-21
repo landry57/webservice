@@ -16,7 +16,7 @@ class SecteurController extends ApiController
      */
     public function index()
     {
-        $secteurs = Secteur::all();
+        $secteurs = Secteur::withTrashed()->get();
        
 
         if (!$secteurs) {
@@ -54,7 +54,7 @@ class SecteurController extends ApiController
     public function show($id)
     {
         
-            $categories = Secteur::findOrFail($id);
+            $categories = Secteur::withTrashed()->findOrFail($id);
         
         if(!$categories)
         {
@@ -74,7 +74,7 @@ class SecteurController extends ApiController
      */
     public function update(Request $request, $id)
     {
-        $data = Secteur::findOrFail($id);
+        $data = Secteur::withTrashed()->findOrFail($id);
 
         if ($data->isDirty()) {
             return  $this->errorResponse('Bad request', 400);
@@ -105,7 +105,7 @@ class SecteurController extends ApiController
     public function destroy($id)
     { 
         try {
-        $data = Secteur::find($id);
+        $data = Secteur::withTrashed()->find($id);
         if (!$data) {
             return $this->errorResponse('secteur not found by ID', 400);
         }

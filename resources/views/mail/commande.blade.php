@@ -41,7 +41,7 @@ align-content: left;
     @include('beautymail::templates.ark.contentStart')
 
         <h4 class="secondary"><strong>La boutique Yéti Beautyhair</strong></h4>
-        <p>vous propose les produits de qualité <a href="http://localhost/webyeti">ici</a></p>
+        <p>vous propose les produits de qualité <a href="http://d1815c57.ngrok.io/yetiweb">ici</a></p>
 
     @include('beautymail::templates.ark.contentEnd')
 
@@ -95,7 +95,7 @@ align-content: left;
          </tr>
          @foreach($order_details as $order)
           <tr>
-            <td><img src="https://32f2a021.ngrok.io/{{$order['img']}}" width="100" height="70"></td>
+            <td><img src="https://8e1926e9.ngrok.io/{{$order['img']}}" width="100" height="70"></td>
              <td>
               <p>{{$order['name']}}</p>
             </td>

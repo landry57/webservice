@@ -19,7 +19,7 @@ class CategoryController extends ApiController
      */
     public function index()
     {
-        $categories = Category::with('children')->get();
+        $categories = Category::withTrashed()->with('children')->get();
        
 
         if (!$categories) {
@@ -54,7 +54,7 @@ class CategoryController extends ApiController
     public function show($id)
     {
         
-            $categories = Category::with('children')->find($id);
+            $categories = Category::withTrashed()->with('children')->find($id);
         
         if(!$categories)
         {
@@ -74,7 +74,7 @@ class CategoryController extends ApiController
      */
     public function update(Request $request, $id)
     {
-        $data = Category::findOrFail($id);
+        $data = Category::withTrashed()->findOrFail($id);
 
         if ($data->isDirty()) {
             return  $this->errorResponse('Bad request', 400);
@@ -102,7 +102,7 @@ class CategoryController extends ApiController
     public function destroy($id)
     { 
         try {
-        $data = Category::find($id);
+        $data = Category::withTrashed()->find($id);
         if (!$data) {
             return $this->errorResponse('Category not found by ID', 400);
         }

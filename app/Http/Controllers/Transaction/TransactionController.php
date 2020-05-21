@@ -24,7 +24,7 @@ class TransactionController extends ApiController
     {
         try
         {
-            $buyers = Transaction::with('product','secteur','buyer','image')
+            $buyers = Transaction::withTrashed()->with('product','secteur','buyer')
             ->get()
             ;
            
@@ -138,7 +138,7 @@ class TransactionController extends ApiController
     {
         try
         {
-            $buyers = Transaction::with('product','secteur','buyer','image')
+            $buyers = Transaction::withTrashed()->with('product','secteur','buyer','image')
             ->get()
             ->where('buyer.id','=',$id);
            
@@ -160,7 +160,7 @@ class TransactionController extends ApiController
      */
     public function update(Request $request, $id)
     {
-          $data = Transaction::findOrFail((int)$id);
+          $data = Transaction::withTrashed()->findOrFail((int)$id);
        
            if ($request->has('status')) {
             $data->status = (int)$request->status;
@@ -192,7 +192,7 @@ class TransactionController extends ApiController
      */
     public function destroy($id)
     {
-        $data = Transaction::find($id);
+        $data = Transaction::withTrashed()->find($id);
 
         if(!$data){
             throw new ModelNotFoundException('Transaction not found by ID');

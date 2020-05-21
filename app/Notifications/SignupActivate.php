@@ -41,7 +41,7 @@ class SignupActivate extends Notification
     public function toMail($notifiable)
     {
        
-    $url = url('http://localhost/webyeti/register/activate/'.$notifiable->activation_token);
+    $url = url('http://d1815c57.ngrok.io/yetiweb/register/activate/'.$notifiable->activation_token);
     return (new MailMessage)
       ->greeting('Salut!')
         ->subject('Confirmez votre compte')
