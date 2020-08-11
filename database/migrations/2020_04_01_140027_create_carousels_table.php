@@ -19,9 +19,8 @@ class CreateCarouselsTable extends Migration
             $table->string('title');
             $table->string('sub_title');
             $table->string('image');
-            $table->boolean('is_active')->default(Carousel::UNSTATUS);
+            $table->boolean('status')->default(Carousel::UNSTATUS);
             $table->timestamps();
-            $table->softDeletes();
         });
     }
 

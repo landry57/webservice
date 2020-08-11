@@ -12,9 +12,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class User extends Authenticatable
 {
    
-    use HasApiTokens, Notifiable, SoftDeletes;
-    protected $dates =['deleted_at'];
-    protected $table = 'users';
+    use HasApiTokens, Notifiable;
     const VERIFIED_USER = '1';
     const UNVERIFIED_USER = '0';
     const ADMIN_USER = true;
@@ -33,7 +31,7 @@ class User extends Authenticatable
         'avatar',
         'admin',
         'password',
-        'active', 
+        'status', 
         'activation_token'
     ];
 

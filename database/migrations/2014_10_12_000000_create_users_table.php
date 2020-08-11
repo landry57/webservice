@@ -18,14 +18,13 @@ class CreateUsersTable extends Migration
             $table->string('name');
             $table->string('avatar')->nullable();
             $table->string('email')->unique();
-            $table->string('phone',20);
+            $table->string('phone',20)->unique();
             $table->boolean('admin')->default(User::REGULAR_USER);
             $table->string('password');
-            $table->boolean('active')->default(false);
+            $table->boolean('status')->default(false);
             $table->string('activation_token');
             $table->rememberToken();
             $table->timestamps();
-            $table->softDeletes();
         });
     }
 

@@ -9,11 +9,9 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Product extends Model
 {
-    use SoftDeletes;
     
     const AVAILABLE_PRODUCT = true;
     const UNAVAILABLE_PRODUCT = false;
-    protected $dates =['deleted_at'];
     protected $fillable= [
         'name',
         'description',
@@ -21,8 +19,7 @@ class Product extends Model
         'status',
         'price',
         'solde',
-        'sub_category_id',
-        'saller_id'
+        'id_category_fk'
     ];
 
     public function isAvailable()
@@ -30,29 +27,5 @@ class Product extends Model
         return $this->status == Product::AVAILABLE_PRODUCT;
     }
 
-    public function seller()
-    {
-        return $this->belongsTo(Saller::class);
-    }
-    
-    public function transactions()
-    {
-        return $this->hasMany(Transaction::class);
-    }
-
-    public function sub_categories()
-    {
-        return $this->belongsToMany(Sub_category::class);
-    }
-
-    public function imageprincipale()
-  {
-    return $this->hasMany(Image_p::class, 'product_id');
-  }
-
-  public function children()
-  {
-    return $this->hasMany(Image_s::class, 'product_id');
-  }
  
 }

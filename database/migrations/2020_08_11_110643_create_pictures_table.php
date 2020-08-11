@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateImagePsTable extends Migration
+class CreatePicturesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,13 +13,13 @@ class CreateImagePsTable extends Migration
      */
     public function up()
     {
-        Schema::create('image_ps', function (Blueprint $table) {
+        Schema::create('pictures', function (Blueprint $table) {
             $table->increments('id');
             $table->string('img');
-            $table->integer('product_id')->unsigned();
+            $table->integer('id_product_fk')->unsigned();
+            $table->boolean('status')->default(0);
             $table->timestamps();
-            $table->softDeletes();
-            $table->foreign('product_id')->references('id')->on('products');
+            $table->foreign('id_product_fk')->references('id')->on('products');
         });
     }
 
@@ -30,6 +30,6 @@ class CreateImagePsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('image_ps');
+        Schema::dropIfExists('pictures');
     }
 }

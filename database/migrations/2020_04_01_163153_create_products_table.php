@@ -22,13 +22,9 @@ class CreateProductsTable extends Migration
             $table->double('price')->unsigned();
             $table->double('solde')->unsigned()->nullable();
             $table->boolean('status')->default(Product::AVAILABLE_PRODUCT);
-            $table->integer('saller_id')->unsigned();
-            $table->integer('sub_category_id')->unsigned();
+            $table->integer('id_category_fk')->unsigned();
             $table->timestamps();
-            $table->softDeletes();
-
-            $table->foreign('saller_id')->references('id')->on('users');
-            $table->foreign('sub_category_id')->references('id')->on('sub_categories');
+            $table->foreign('id_category_fk')->references('id')->on('categories');
         });
     }
 

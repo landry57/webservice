@@ -16,18 +16,16 @@ class CreateTransactionsTable extends Migration
     {
         Schema::create('transactions', function (Blueprint $table) {
             $table->increments('id');
+            $table->increments('numero_commande')->unsigned()->unique();
             $table->integer('quantity')->unsigned();
-            $table->integer('buyer_id')->unsigned();
-            $table->integer('product_id')->unsigned();
-            $table->integer('secteur_id')->unsigned();
+            $table->integer('id_buyer_fk')->unsigned();
+            $table->integer('id_product_fk')->unsigned();
             $table->boolean('status')->default(Transaction::UNDELIVRE);
             $table->timestamps();
-            $table->softDeletes();
+          
             
-            
-            $table->foreign('buyer_id')->references('id')->on('users');
-            $table->foreign('product_id')->references('id')->on('products');
-            $table->foreign('secteur_id')->references('id')->on('secteurs');
+            $table->foreign('id_buyer_fk')->references('id')->on('users');
+            $table->foreign('id_product_fk')->references('id')->on('products');
         });
     }
 

@@ -16,11 +16,12 @@ class Transaction extends Model
     const UNDELIVRE = false;
  
     protected $fillable= [
+        'id',
+        'numero_commande',
         'quantity',
         'status',
-        'product_id',
-        'buyer_id',  
-        'secteur_id'  
+        'id_product_fk',
+        'id_buyer_fk'
     ];
 
     public function isDelivre()
@@ -28,29 +29,7 @@ class Transaction extends Model
         return $this->status = Transaction::DELIVRE;
     }
 
-    public function buyer()
-    {
-     return $this->belongsTo(Buyer::class);
-    }
-
-    public function secteur()
-    {
-     return $this->belongsTo(Secteur::class);
-    }
-
-
     
-    public function product()
-    {
-     return $this->belongsTo(Product::class);
-    }
-
-  
-    public function trasact()
-    {
-        return $this->hasOne(Transaction::class);
-    }
-
    
 
 }
