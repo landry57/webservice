@@ -8,8 +8,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class Transaction extends Model
 {
 
-    use SoftDeletes;
-    protected $dates =['deleted_at'];
+
     const DELIVRE = true;
     const UNDELIVRE = false;
  

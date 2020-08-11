@@ -12,7 +12,9 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class User extends Authenticatable
 {
    
-    use HasApiTokens, Notifiable;
+    use HasApiTokens, Notifiable, SoftDeletes;
+    protected $dates =['deleted_at'];
+    protected $table = 'users';
     const VERIFIED_USER = '1';
     const UNVERIFIED_USER = '0';
     const ADMIN_USER = true;
@@ -58,7 +60,7 @@ class User extends Authenticatable
         $this->attributes['name'] = strtolower($name);
     }
 
-    public function getNameAttribute($name)
+    public static function getNameAttribute($name)
     {
        return ucwords($name);
     }

@@ -47,12 +47,12 @@ class UserController extends ApiController
 
 
         $data = $request->validate([
-            'name' => 'required|string',
+            'fullname' => 'required|string',
             'phone' => 'required|string|unique:users',
             'email' => 'required|email|unique:users',
             'password' => 'required|confirmed',
         ]);
-        $avatar='';
+        $avatar = '';
         if ($files = $request->file('avatar')) {
             $destinationPath = 'images/avatar/'; // upload path
             $profilefile = date('YmdHis') . "." . $files->getClientOriginalExtension();
@@ -61,11 +61,11 @@ class UserController extends ApiController
         }
 
         $user = new User([
-            'name' => $request->name,
+            'fullname' => User::getNameAttribute($request->fullname),
             'email' => $request->email,
             'phone' => $request->phone,
             'admin' => User::REGULAR_USER,
-            'avatar' =>  $avatar?$avatar:'avatar',
+            'avatar' =>  $avatar ? $avatar : 'avatar',
             'password' => bcrypt($request->password),
             'activation_token' => str_random(60)
         ]);
@@ -74,23 +74,23 @@ class UserController extends ApiController
 
         $accessToken = $user->createToken('authToken')->accessToken;
 
-        return response()->json(['data' => $user, 'access_token' => $accessToken],201);
+        return response()->json(['data' => $user, 'access_token' => $accessToken], 201);
     }
 
 
     public function signupActivate($token)
-{
-    $user = User::where('activation_token', $token)->first();
-    if (!$user) {
-        return response()->json([
-            'message' => 'This activation token is invalid.'
-        ], 404);
+    {
+        $user = User::where('activation_token', $token)->first();
+        if (!$user) {
+            return response()->json([
+                'message' => 'This activation token is invalid.'
+            ], 404);
+        }
+        $user->status = true;
+        $user->activation_token = '';
+        $user->save();
+        return $this->showOne($user);
     }
-    $user->active = true;
-    $user->activation_token = '';
-    $user->save();
-    return $this->showOne($user);
-}
 
     /**
      * Display the specified resource.
@@ -108,31 +108,33 @@ class UserController extends ApiController
         return $this->showOne($res);
     }
 
-     /**
+    /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request,$id)
+    public function update(Request $request, $id)
     {
         $data = User::findOrFail($id);
 
-      
-       
 
-          if ($request->has('email')) {
+        if ($request->has('status')) {
+            $data->status = $request->status;
+        }
+
+        if ($request->has('email')) {
             $data->email = $request->email;
-          }
-          if ($request->has('phone')) {
+        }
+        if ($request->has('phone')) {
             $data->phone = $request->phone;
-          }
-          if ($request->has('name')) {
-            $data->name = $request->name;
-          }
-          
-          if ($files = $request->file('avatar')) {
+        }
+        if ($request->has('fullname')) {
+            $data->fullname =  User::getNameAttribute($request->fullname);
+        }
+
+        if ($files = $request->file('avatar')) {
             if (Storage::exists($data->avatar)) {
                 File::delete($data->avatar);
             }
@@ -143,17 +145,17 @@ class UserController extends ApiController
             $files->move($destinationPath, $profilefile);
             $data->avatar = $destinationPath . "$profilefile";
         }
-          
-    
-         
-          if (!$data->isDirty()) {
+
+
+
+        if (!$data->isDirty()) {
             return  $this->errorResponse('You need to specify a different value to update', 422);
-          }
-          $data->save();
-          return $this->showOne($data);
+        }
+        $data->save();
+        return $this->showOne($data);
     }
 
- 
+
     /**
      * Remove the specified resource from storage.
      *
@@ -164,20 +166,19 @@ class UserController extends ApiController
     {
         $data = User::find($id);
 
-        if(!$data){
+        if (!$data) {
             throw new ModelNotFoundException('User not found by ID');
-      
         }
-        
-        $data->Delete(); 
-        
-        
+
+        $data->Delete();
+
+
         return $this->showOne($data);
     }
 
 
 
-     /**
+    /**
      * login.
      *
      * @param  int  email,password
@@ -191,10 +192,11 @@ class UserController extends ApiController
             'remember_me' => 'boolean'
         ]);
         $credentials = request(['email', 'password']);
-        $credentials['active'] = 1;
+        $credentials['status'] = 1;
         $credentials['deleted_at'] = null;
-        if(!Auth::attempt($credentials))
+        if (!Auth::attempt($credentials))
             return $this->errorResponse('Unauthorized', 401);
+
         $user = $request->user();
 
         $tokenResult = $user->createToken('Personal Access Token');
@@ -202,16 +204,15 @@ class UserController extends ApiController
         if ($request->remember_me)
             $token->expires_at = Carbon::now()->addWeeks(1);
         $token->save();
-        return response()->json(['data'=>[
+        return response()->json(['data' => [
             'access_token' => $tokenResult->accessToken,
-            'id'=>$user['id'],
-            'name'=>$user['name'],
-            'admin'=>$user['admin'],
-            'avatar'=>$user['avatar'],
+            'id' => $user['id'],
+            'fullname' => $user['fullname'],
+            'admin' => $user['admin'],
+            'avatar' => $user['avatar'],
             'token_type' => 'Bearer',
             'expires_at' => Carbon::parse($tokenResult->token->expires_at)->toDateTimeString()
-        ]],200);
-          
+        ]], 200);
     }
 
 
@@ -225,63 +226,59 @@ class UserController extends ApiController
         if (Auth::user()) {
             $user = Auth::user()->token();
             $user->revoke();
-    
+
             return response()->json([
-              'success' => true,
-              'message' => 'You have been successfully logged out!'
-            ],200);
-          }else {
+                'success' => true,
+                'message' => 'You have been successfully logged out!'
+            ], 200);
+        } else {
             return response()->json([
-              'success' => false,
-              'message' => 'Unable to Logout'
-            ],400);
-          }
-    }
-
-
-
-
-
-public function change_password(Request $request)
-{
-    $input = $request->all();
-    $userid = Auth::guard('api')->user()->id;
-    $rules = array(
-        'old_password' => 'required',
-        'new_password' => 'required',
-        'confirm_password' => 'required|same:new_password',
-    );
-    $validator = Validator::make($input, $rules);
-    if ($validator->fails()) {
-        $arr = array("message" => $validator->errors()->first());
-        return Response()->json($arr,400);
-    
-    } else {
-        try {
-            if ((Hash::check(request('old_password'), Auth::user()->password)) == false) {
-                $arr = array("message" => "Check your old password.");
-                return Response()->json($arr,400);
-            } else if ((Hash::check(request('new_password'), Auth::user()->password)) == true) {
-                $arr = array("message" => "Please enter a password which is not similar then current password.");
-                return Response()->json($arr,400);
-                
-            } else {
-                User::where('id', $userid)->update(['password' => Hash::make($input['new_password'])]);
-                
-                $arr = array("message" => "Password updated successfully.");
-                return Response()->json($arr,200);
-            }
-        } catch (\Exception $ex) {
-            if (isset($ex->errorInfo[2])) {
-                $msg = $ex->errorInfo[2];
-            } else {
-                $msg = $ex->getMessage();
-            }
-            $arr = array("message" => $msg);
-            return Response()->json($arr,400);
+                'success' => false,
+                'message' => 'Unable to Logout'
+            ], 400);
         }
     }
-   
-}
 
+
+
+
+
+    public function change_password(Request $request)
+    {
+        $input = $request->all();
+        $userid = Auth::guard('api')->user()->id;
+        $rules = array(
+            'old_password' => 'required',
+            'new_password' => 'required',
+            'confirm_password' => 'required|same:new_password',
+        );
+        $validator = Validator::make($input, $rules);
+        if ($validator->fails()) {
+            $arr = array("message" => $validator->errors()->first());
+            return Response()->json($arr, 400);
+        } else {
+            try {
+                if ((Hash::check(request('old_password'), Auth::user()->password)) == false) {
+                    $arr = array("message" => "Check your old password.");
+                    return Response()->json($arr, 400);
+                } else if ((Hash::check(request('new_password'), Auth::user()->password)) == true) {
+                    $arr = array("message" => "Please enter a password which is not similar then current password.");
+                    return Response()->json($arr, 400);
+                } else {
+                    User::where('id', $userid)->update(['password' => Hash::make($input['new_password'])]);
+
+                    $arr = array("message" => "Password updated successfully.");
+                    return Response()->json($arr, 200);
+                }
+            } catch (\Exception $ex) {
+                if (isset($ex->errorInfo[2])) {
+                    $msg = $ex->errorInfo[2];
+                } else {
+                    $msg = $ex->getMessage();
+                }
+                $arr = array("message" => $msg);
+                return Response()->json($arr, 400);
+            }
+        }
+    }
 }
