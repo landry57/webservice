@@ -3,8 +3,6 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
-use App\Product;
-use App\Buyer;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Transaction extends Model
@@ -17,7 +15,6 @@ class Transaction extends Model
  
     protected $fillable= [
         'id',
-        'numero_commande',
         'quantity',
         'status',
         'id_product_fk',

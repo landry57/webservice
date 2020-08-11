@@ -1,10 +1,10 @@
 <?php
-use App\User;
+
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateUsersTable extends Migration
+class CreateClientsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,17 +13,11 @@ class CreateUsersTable extends Migration
      */
     public function up()
     {
-        Schema::create('users', function (Blueprint $table) {
+        Schema::create('clients', function (Blueprint $table) {
             $table->increments('id');
             $table->string('fullname');
-            $table->string('avatar')->nullable();
-            $table->string('email')->unique();
             $table->string('phone',20)->unique();
-            $table->boolean('admin')->default(User::REGULAR_USER);
-            $table->string('password');
             $table->boolean('status')->default(false);
-            $table->string('activation_token');
-            $table->rememberToken();
             $table->timestamps();
         });
     }
@@ -35,6 +29,6 @@ class CreateUsersTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('users');
+        Schema::dropIfExists('clients');
     }
 }

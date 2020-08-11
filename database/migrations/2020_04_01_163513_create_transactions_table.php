@@ -16,7 +16,6 @@ class CreateTransactionsTable extends Migration
     {
         Schema::create('transactions', function (Blueprint $table) {
             $table->increments('id');
-            $table->increments('numero_commande')->unsigned()->unique();
             $table->integer('quantity')->unsigned();
             $table->integer('id_buyer_fk')->unsigned();
             $table->integer('id_product_fk')->unsigned();
