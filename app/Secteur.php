@@ -1,16 +1,15 @@
 <?php
 
 namespace App;
-use App\Sub_category;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Category extends Model
+class Secteur extends Model
 {  
   
     protected $fillable= [
         'id',
-        'categorieName',
+        'secteurName',
         'status'
     ];
 

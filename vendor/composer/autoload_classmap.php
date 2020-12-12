@@ -6,7 +6,6 @@ $vendorDir = dirname(dirname(__FILE__));
 $baseDir = dirname($vendorDir);
 
 return array(
-    'App\\Buyer' => $baseDir . '/app/Buyer.php',
     'App\\Carousel' => $baseDir . '/app/Carousel.php',
     'App\\Category' => $baseDir . '/app/Category.php',
     'App\\Client' => $baseDir . '/app/Client.php',
@@ -29,6 +28,7 @@ return array(
     'App\\Http\\Controllers\\MailController' => $baseDir . '/app/Http/Controllers/MailController.php',
     'App\\Http\\Controllers\\Picture\\PictureController' => $baseDir . '/app/Http/Controllers/Picture/PictureController.php',
     'App\\Http\\Controllers\\Product\\ProductController' => $baseDir . '/app/Http/Controllers/Product/ProductController.php',
+    'App\\Http\\Controllers\\Secteur\\SecteurController' => $baseDir . '/app/Http/Controllers/Secteur/SecteurController.php',
     'App\\Http\\Controllers\\Security\\ForgotPassword' => $baseDir . '/app/Http/Controllers/Security/ForgotPassword.php',
     'App\\Http\\Controllers\\Transaction\\TransactionController' => $baseDir . '/app/Http/Controllers/Transaction/TransactionController.php',
     'App\\Http\\Controllers\\User\\UserController' => $baseDir . '/app/Http/Controllers/User/UserController.php',
@@ -53,8 +53,7 @@ return array(
     'App\\Providers\\BroadcastServiceProvider' => $baseDir . '/app/Providers/BroadcastServiceProvider.php',
     'App\\Providers\\EventServiceProvider' => $baseDir . '/app/Providers/EventServiceProvider.php',
     'App\\Providers\\RouteServiceProvider' => $baseDir . '/app/Providers/RouteServiceProvider.php',
-    'App\\Scopes\\BuyerScope' => $baseDir . '/app/Scopes/BuyerScope.php',
-    'App\\Scopes\\SallerScope' => $baseDir . '/app/Scopes/SallerScope.php',
+    'App\\Secteur' => $baseDir . '/app/Secteur.php',
     'App\\Traits\\ApiResponser' => $baseDir . '/app/Traits/ApiResponser.php',
     'App\\Transaction' => $baseDir . '/app/Transaction.php',
     'App\\User' => $baseDir . '/app/User.php',

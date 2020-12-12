@@ -83,9 +83,9 @@ class CarouselController extends ApiController
      */
     public function update(Request $request, $id)
     {
-        $data = Carousel::findOrFail($id);
+        $data = Carousel::find($id);
 
-        if ($data->isDirty()) {
+        if (is_null($data)) {
             return  $this->errorResponse('Bad request', 400);
         }
         if (!$request) {

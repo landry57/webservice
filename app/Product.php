@@ -3,7 +3,7 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
-
+use App\Transaction;
 class Product extends Model
 {
     
@@ -32,5 +32,10 @@ class Product extends Model
         return $this->hasMany('App\Picture','id');
       }
 
+      public function transactions()
+      {
+          return $this->hasMany(Transaction::class);
+      }
+  
  
 }

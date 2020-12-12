@@ -21,12 +21,14 @@ class CreateTransactionsTable extends Migration
             $table->double('price');
             $table->integer('user_id')->unsigned();
             $table->integer('product_id')->unsigned();
+            $table->integer('secteur_id')->unsigned()->nullable();
             $table->boolean('status')->default(Transaction::UNDELIVRE);
             $table->timestamps();
           
             
             $table->foreign('user_id')->references('id')->on('users');
             $table->foreign('product_id')->references('id')->on('products')->onDelete('cascade');
+            $table->foreign('secteur_id')->references('id')->on('secteurs')->onDelete('cascade');
         });
     }
 

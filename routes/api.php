@@ -35,21 +35,16 @@ Route::group(['prefix' => 'v1', 'as' => 'v1'], function () {
        /**
      * image
      */
-    Route::resource('picture', 'Picture\PictureController', ['only' => ['index', 'show']]);
+    Route::resource('pictures', 'Picture\PictureController', ['only' => ['index', 'show']]);
 
 
-    Route::resource('secteur', 'Secteur\SecteurController', ['only' => ['index', 'show']]);
+    Route::resource('secteurs', 'Secteur\SecteurController', ['only' => ['index', 'show']]);
 
     /**
      * carousel
      */
-    Route::resource('carousel', 'Carousel\CarouselController', ['only' => ['index', 'show']]);
-    /**
-     * image p  and s
-     */
-    Route::resource('imagep', 'Image_p\Image_pController', ['only' => ['index', 'show']]);
-    Route::resource('images', 'Image_s\Image_sController', ['only' => ['index', 'show']]);
-
+    Route::resource('carousels', 'Carousel\CarouselController', ['only' => ['index', 'show']]);
+  
 
     //login
     Route::post('login', 'User\UserController@login');
@@ -77,8 +72,8 @@ Route::group(['prefix' => 'v1/', 'middleware' => 'auth:api'], function () {
      * Buyers
      */
     Route::resource('buyers', 'Buyer\BuyerController', ['only' => ['index', 'show']]);
-    Route::resource('buyers.products', 'Buyer\BuyerProductController', ['only' => ['index']]);
-    Route::resource('buyers.transactions', 'Buyer\BuyerTransactionController', ['only' => ['index']]);
+    Route::resource('buyersproducts', 'Buyer\BuyerProductController', ['only' => ['index']]);
+    Route::resource('buyerstransactions', 'Buyer\BuyerTransactionController', ['only' => ['index']]);
 
     /**
      * Categories
@@ -94,7 +89,7 @@ Route::group(['prefix' => 'v1/', 'middleware' => 'auth:api'], function () {
     /**
      * carousel
      */
-    Route::resource('carousel', 'Carousel\CarouselController', ['only' => ['store', 'update', 'destroy']]);
+    Route::resource('carousels', 'Carousel\CarouselController', ['only' => ['store', 'update', 'destroy']]);
 
     /**
      * Sallers
@@ -114,10 +109,10 @@ Route::group(['prefix' => 'v1/', 'middleware' => 'auth:api'], function () {
     /**
      * image
      */
-    Route::resource('picture', 'Picture\PictureController', ['only' => ['store', 'update', 'destroy']]);
+    Route::resource('pictures', 'Picture\PictureController', ['only' => ['store', 'update', 'destroy']]);
 
      
-    Route::resource('secteur', 'Secteur\SecteurController', ['only' => ['store', 'update', 'destroy']]);
+    Route::resource('secteurs', 'Secteur\SecteurController', ['only' => ['store', 'update', 'destroy']]);
 
 
      //logout

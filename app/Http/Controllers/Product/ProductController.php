@@ -94,9 +94,9 @@ class ProductController extends ApiController
     public function update(Request $request, $id)
     {
         try {
-        //$data = Product::findOrFail($id);
+      
         $data=Product::find($id);
-        if ($data->isDirty()) {
+        if (is_null($data)) {
             return  $this->errorResponse('Bad request', 400);
         }
         if (!$request) {

@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Http\Controllers\Category;
+namespace App\Http\Controllers\Secteur;
 
-use App\Category;
+use App\Secteur;
 use App\Http\Controllers\ApiController;
 use Exception;
 use Illuminate\Http\Request;
 
-class CategoryController extends ApiController
+class SecteurController extends ApiController
 {
     /**
      * Display a listing of the resource.
@@ -16,13 +16,13 @@ class CategoryController extends ApiController
      */
     public function index()
     {
-        $categories = Category::get();
+        $secteurs = Secteur::get();
        
 
-        if (!$categories) {
-            return $this->respondNotFound('Categories does not exists');
+        if (!$secteurs) {
+            return $this->respondNotFound('secteurs does not exists');
         }
-        return $this->showAll($categories);
+        return $this->showAll($secteurs);
     }
 
   
@@ -36,12 +36,11 @@ class CategoryController extends ApiController
     public function store(Request $request)
     {
         $data = $request->validate([
-            'categorieName' => 'required|string|unique:categories',
+            'secteurName' => 'required|string|unique:secteurs',
             ]);
-
-            $data['status']=1;
-
-        $res = Category::create($data);
+    
+         $data['status']=1;   
+        $res = Secteur::create($data);
         return $this->showOne($res,201); 
     }
 
@@ -54,14 +53,14 @@ class CategoryController extends ApiController
     public function show($id)
     {
         
-            $categories = Category::find($id);
+            $secteurs = Secteur::find($id);
         
-        if(!$categories)
+        if(!$secteurs)
         {
             return $this->errorResponse('Not Found!', 404);
         }
            
-        return $this->showOne($categories);
+        return $this->showOne($secteurs);
     
     }
 
@@ -74,20 +73,18 @@ class CategoryController extends ApiController
      */
     public function update(Request $request, $id)
     {
-        $data = Category::find($id);
+        $data = Secteur::find($id);
 
-
-        if (is_null($data)){
+        if (is_null($data)) {
             return  $this->errorResponse('Bad request', 400);
         }
         if (!$request) {
             return  $this->errorResponse('You need to specify a different value to update', 422);
         }
       
-        if ($request->has('categorieName')) {
-            $data->categorieName = $request->categorieName;
+        if ($request->has('secteurName')) {
+            $data->secteurName = $request->secteurName;
         }
-
         if ($request->has('status')) {
             $data->status = (int)$request->status;
         }
@@ -107,9 +104,9 @@ class CategoryController extends ApiController
     public function destroy($id)
     { 
         try {
-        $data = Category::find($id);
+        $data = Secteur::find($id);
         if (!$data) {
-            return $this->errorResponse('Category not found by ID', 400);
+            return $this->errorResponse('Secteur not found by ID', 400);
         }
         $data->Delete();
         return $this->showOne($data);

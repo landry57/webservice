@@ -536,7 +536,6 @@ class ComposerStaticInit927aedbb6bd65c28cf1aad73ccfc8b04
     );
 
     public static $classMap = array (
-        'App\\Buyer' => __DIR__ . '/../..' . '/app/Buyer.php',
         'App\\Carousel' => __DIR__ . '/../..' . '/app/Carousel.php',
         'App\\Category' => __DIR__ . '/../..' . '/app/Category.php',
         'App\\Client' => __DIR__ . '/../..' . '/app/Client.php',
@@ -559,6 +558,7 @@ class ComposerStaticInit927aedbb6bd65c28cf1aad73ccfc8b04
         'App\\Http\\Controllers\\MailController' => __DIR__ . '/../..' . '/app/Http/Controllers/MailController.php',
         'App\\Http\\Controllers\\Picture\\PictureController' => __DIR__ . '/../..' . '/app/Http/Controllers/Picture/PictureController.php',
         'App\\Http\\Controllers\\Product\\ProductController' => __DIR__ . '/../..' . '/app/Http/Controllers/Product/ProductController.php',
+        'App\\Http\\Controllers\\Secteur\\SecteurController' => __DIR__ . '/../..' . '/app/Http/Controllers/Secteur/SecteurController.php',
         'App\\Http\\Controllers\\Security\\ForgotPassword' => __DIR__ . '/../..' . '/app/Http/Controllers/Security/ForgotPassword.php',
         'App\\Http\\Controllers\\Transaction\\TransactionController' => __DIR__ . '/../..' . '/app/Http/Controllers/Transaction/TransactionController.php',
         'App\\Http\\Controllers\\User\\UserController' => __DIR__ . '/../..' . '/app/Http/Controllers/User/UserController.php',
@@ -583,8 +583,7 @@ class ComposerStaticInit927aedbb6bd65c28cf1aad73ccfc8b04
         'App\\Providers\\BroadcastServiceProvider' => __DIR__ . '/../..' . '/app/Providers/BroadcastServiceProvider.php',
         'App\\Providers\\EventServiceProvider' => __DIR__ . '/../..' . '/app/Providers/EventServiceProvider.php',
         'App\\Providers\\RouteServiceProvider' => __DIR__ . '/../..' . '/app/Providers/RouteServiceProvider.php',
-        'App\\Scopes\\BuyerScope' => __DIR__ . '/../..' . '/app/Scopes/BuyerScope.php',
-        'App\\Scopes\\SallerScope' => __DIR__ . '/../..' . '/app/Scopes/SallerScope.php',
+        'App\\Secteur' => __DIR__ . '/../..' . '/app/Secteur.php',
         'App\\Traits\\ApiResponser' => __DIR__ . '/../..' . '/app/Traits/ApiResponser.php',
         'App\\Transaction' => __DIR__ . '/../..' . '/app/Transaction.php',
         'App\\User' => __DIR__ . '/../..' . '/app/User.php',

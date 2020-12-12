@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Buyer;
 
 use App\Buyer;
 use App\Http\Controllers\ApiController;
+use App\User;
 use Illuminate\Http\Request;
 
 class BuyerTransactionController extends ApiController
@@ -13,7 +14,7 @@ class BuyerTransactionController extends ApiController
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Buyer $buyer)
+    public function index(User $buyer)
     {
        $transactions = $buyer->transactions;
        return $this->showAll($transactions);

@@ -2,16 +2,10 @@
 
 namespace App\Http\Controllers\Buyer;
 
-use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
-use App\Buyer;
 use App\Http\Controllers\ApiController;
-use Dotenv\Parser;
-use Exception;
-use Illuminate\Support\Facades\Auth;
-use Validator;
+use App\User;
+
 use Illuminate\Database\Eloquent\ModelNotFoundException;
-use Throwable;
 
 class BuyerController extends ApiController
 {
@@ -22,7 +16,7 @@ class BuyerController extends ApiController
      */
     public function index()
     {
-        $buyers = Buyer::has('transactions')->get();
+        $buyers = User::has('transactions')->get();
         return $this->showAll($buyers);
     }
 
@@ -37,7 +31,7 @@ class BuyerController extends ApiController
        
         try
         {
-            $buyers = Buyer::has('transactions')->find($id);
+            $buyers = User::has('transactions')->find($id);
         }
         catch(ModelNotFoundException $e)
         {

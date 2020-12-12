@@ -85,9 +85,9 @@ class PictureController extends ApiController
     */
    public function update(Request $request, $id)
    {
-       $data = Picture::findOrFail($id);
+       $data = Picture::find($id);
 
-       if ($data->isDirty()) {
+       if (is_null($data)) {
            return  $this->errorResponse('Bad request', 400);
        }
        if (!$request) {

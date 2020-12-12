@@ -62,12 +62,12 @@ class TransactionController extends ApiController
          $data['quantity']=(int)$order['quantity'];
          $data['product_id']=(int)$order['id'];
          $data['secteur_id']=$idsecteur;
-         $data['sub_category_id']=(int)$order['sub_category_id'];
+         $data['category_id']=(int)$order['category_id'];
          $data['buyer_id']=(int)$userid;
          $data['status'] = Transaction::UNDELIVRE;
          $res[] = Transaction::create($data);
          DB::table('product_sub_category')->insert(
-            ['sub_category_id' => $data['sub_category_id'], 'product_id' =>$data['product_id']]
+            ['category_id' => $data['category_id'], 'product_id' =>$data['product_id']]
         );
          };
         if(!$res){
