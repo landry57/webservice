@@ -58,7 +58,7 @@ Route::group(['prefix' => 'v1', 'as' => 'v1'], function () {
     Route::post('sendmail', 'MailController@sendEmail');
   
     Route::get('customer','MailController@sendOrderEmail');
-    //forgot password
+    //forgot password make
     Route::post('create', 'Security\ForgotPassword@create');
     Route::get('find/{token}', 'Security\ForgotPassword@find');
     Route::post('reset', 'Security\ForgotPassword@reset');
