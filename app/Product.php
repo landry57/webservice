@@ -1,11 +1,8 @@
 <?php
 
 namespace App;
-use App\Saller;
-use App\Sub_category;
-use App\Transaction;
+
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Product extends Model
 {
@@ -13,19 +10,27 @@ class Product extends Model
     const AVAILABLE_PRODUCT = true;
     const UNAVAILABLE_PRODUCT = false;
     protected $fillable= [
-        'name',
+        'productName',
         'description',
-        'code',
+        'reference',
         'status',
-        'price',
-        'solde',
-        'id_category_fk'
+        'regular_price',
+        'discount_price',
+        'categorie_id'
     ];
 
     public function isAvailable()
     {
         return $this->status == Product::AVAILABLE_PRODUCT;
     }
+
+     public function category() {
+        return $this->belongsTo('App\Categorie','categorie_id');
+      }
+
+      public function  pictures() {
+        return $this->hasMany('App\Picture','id');
+      }
 
  
 }

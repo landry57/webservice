@@ -27,15 +27,16 @@ Route::group(['prefix' => 'v1', 'as' => 'v1'], function () {
      * Categories
      */
     Route::resource('categories', 'Category\CategoryController', ['only' => ['index', 'show']]);
-
-    /**
-     * sub_Categories
-     */
-    Route::resource('subcategories', 'Category\CategoryController', ['only' => ['index', 'show']]);
     /**
      * Products
      */
     Route::resource('products', 'Product\ProductController', ['only' => ['index', 'show']]);
+
+       /**
+     * image
+     */
+    Route::resource('picture', 'Picture\PictureController', ['only' => ['index', 'show']]);
+
 
     Route::resource('secteur', 'Secteur\SecteurController', ['only' => ['index', 'show']]);
 
@@ -84,11 +85,7 @@ Route::group(['prefix' => 'v1/', 'middleware' => 'auth:api'], function () {
      */
     Route::resource('categories', 'Category\CategoryController', ['only' => ['store', 'update', 'destroy']]);
 
-    /**
-     * sub_Categories
-     */
-    Route::resource('subcategories', 'Sub_category\Sub_categoryController', ['only' => ['store', 'update', 'destroy']]);
-
+    
     /**
      * Products
      */
@@ -115,10 +112,10 @@ Route::group(['prefix' => 'v1/', 'middleware' => 'auth:api'], function () {
     Route::resource('transactions.subcategory', 'Transaction\TransactionCategoryController', ['only' => ['index']]);
 
     /**
-     * image p  and s
+     * image
      */
-    Route::resource('imagep', 'Image_p\Image_pController', ['only' => ['store', 'update', 'destroy']]);
-    Route::resource('images', 'Image_s\Image_sController', ['only' => ['store', 'update', 'destroy']]);
+    Route::resource('picture', 'Picture\PictureController', ['only' => ['store', 'update', 'destroy']]);
+
      
     Route::resource('secteur', 'Secteur\SecteurController', ['only' => ['store', 'update', 'destroy']]);
 

@@ -22,7 +22,7 @@ class BuyerController extends ApiController
      */
     public function index()
     {
-        $buyers = Buyer::withTrashed()->has('transactions')->get();
+        $buyers = Buyer::has('transactions')->get();
         return $this->showAll($buyers);
     }
 
@@ -37,7 +37,7 @@ class BuyerController extends ApiController
        
         try
         {
-            $buyers = Buyer::withTrashed()->has('transactions')->find($id);
+            $buyers = Buyer::has('transactions')->find($id);
         }
         catch(ModelNotFoundException $e)
         {

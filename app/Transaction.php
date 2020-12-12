@@ -3,7 +3,6 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Transaction extends Model
 {
@@ -15,17 +14,26 @@ class Transaction extends Model
     protected $fillable= [
         'id',
         'quantity',
+        'confirmed',
+        'price',
         'status',
-        'id_product_fk',
-        'id_buyer_fk'
+        'product_id',
+        'user_id'
     ];
 
     public function isDelivre()
     {
         return $this->status = Transaction::DELIVRE;
+       
     }
 
-    
+    public function order(){
+        return $this->belongsTo("App\Product","product_id");
+    }
+
+    public function buyer(){
+        return $this->belongsTo("App\User","user_id");
+    }
    
 
 }

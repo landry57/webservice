@@ -4,10 +4,7 @@ namespace App\Http\Controllers\Category;
 
 use App\Category;
 use App\Http\Controllers\ApiController;
-use App\Http\Controllers\Controller;
-use App\Sub_category;
 use Exception;
-use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 
 class CategoryController extends ApiController
@@ -19,7 +16,7 @@ class CategoryController extends ApiController
      */
     public function index()
     {
-        $categories = Category::withTrashed()->with('children')->get();
+        $categories = Category::with('children')->get();
        
 
         if (!$categories) {
@@ -39,7 +36,7 @@ class CategoryController extends ApiController
     public function store(Request $request)
     {
         $data = $request->validate([
-            'name' => 'required|string|unique:categories',
+            'categorieName' => 'required|string|unique:categories',
             ]);
         $res = Category::create($data);
         return $this->showOne($res,201); 
@@ -54,7 +51,7 @@ class CategoryController extends ApiController
     public function show($id)
     {
         
-            $categories = Category::withTrashed()->with('children')->find($id);
+            $categories = Category::with('children')->find($id);
         
         if(!$categories)
         {
@@ -83,8 +80,8 @@ class CategoryController extends ApiController
             return  $this->errorResponse('You need to specify a different value to update', 422);
         }
       
-        if ($request->has('name')) {
-            $data->name = $request->name;
+        if ($request->has('categorieName')) {
+            $data->categorieName = $request->categorieName;
         }
        
         $data->save();
@@ -102,7 +99,7 @@ class CategoryController extends ApiController
     public function destroy($id)
     { 
         try {
-        $data = Category::withTrashed()->find($id);
+        $data = Category::find($id);
         if (!$data) {
             return $this->errorResponse('Category not found by ID', 400);
         }

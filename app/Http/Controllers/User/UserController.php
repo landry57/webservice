@@ -7,16 +7,12 @@ use App\Notifications\SignupActivate;
 use Illuminate\Http\Request;
 use App\User;
 use Carbon\Carbon;
-use Exception;
-use Lcobucci\JWT\Parser;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
-use Illuminate\Mail\Message;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Facades\File;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
+use Laravolt\Avatar\Facade as Avatar;
 
 class UserController extends ApiController
 {
@@ -60,12 +56,16 @@ class UserController extends ApiController
             $avatar = $destinationPath . "$profilefile";
         }
 
+        $link ='uploads/avatar/'.date('YmdHis') . '.avatar.png';
+        //$link ='uploads/avatar20201031140617.file.png';
+         Avatar::create(User::getNameAttribute($request->fullname))->save($link, $quality = 100);
+        
         $user = new User([
             'fullname' => User::getNameAttribute($request->fullname),
             'email' => $request->email,
             'phone' => $request->phone,
             'admin' => User::REGULAR_USER,
-            'avatar' =>  $avatar ? $avatar : 'avatar',
+            'avatar' =>  $avatar ? $avatar : $link,
             'password' => bcrypt($request->password),
             'activation_token' => str_random(60)
         ]);
@@ -134,20 +134,7 @@ class UserController extends ApiController
             $data->fullname =  User::getNameAttribute($request->fullname);
         }
 
-        if ($files = $request->file('avatar')) {
-            if (Storage::exists($data->avatar)) {
-                File::delete($data->avatar);
-            }
-
-            $destinationPath = 'images/avatar/'; // upload path
-
-            $profilefile = date('YmdHis') . "." . $files->getClientOriginalExtension();
-            $files->move($destinationPath, $profilefile);
-            $data->avatar = $destinationPath . "$profilefile";
-        }
-
-
-
+       
         if (!$data->isDirty()) {
             return  $this->errorResponse('You need to specify a different value to update', 422);
         }
@@ -168,6 +155,9 @@ class UserController extends ApiController
 
         if (!$data) {
             throw new ModelNotFoundException('User not found by ID');
+        }
+        if (File::exists(public_path($data->avatar))) {
+            File::delete($data->avatar);
         }
 
         $data->Delete();

@@ -15,11 +15,11 @@ class CreatePicturesTable extends Migration
     {
         Schema::create('pictures', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('img');
-            $table->integer('id_product_fk')->unsigned();
+            $table->string('path');
+            $table->integer('product_id')->unsigned();
             $table->boolean('status')->default(0);
             $table->timestamps();
-            $table->foreign('id_product_fk')->references('id')->on('products');
+            $table->foreign('product_id')->references('id')->on('products')->onDelete('cascade');
         });
     }
 

@@ -6,8 +6,10 @@ use App\Http\Controllers\ApiController;
 use App\Image_p;
 use App\Image_s;
 use App\Product;
+use App\Picture;
 use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\File;
 
 class ProductController extends ApiController
 {
@@ -19,8 +21,8 @@ class ProductController extends ApiController
     public function index()
     {
        
-        //$categories = Product::with('imageprincipale','children')->get();
-        $categories = Product::withTrashed()->with('imageprincipale','children')->get();
+       
+        $categories = Product::with('category','pictures')->get();
        
        
         if (!$categories) {
@@ -38,16 +40,15 @@ class ProductController extends ApiController
     public function store(Request $request)
     {
         $data = $request->validate([
-            'name' => 'required|string|unique:products',
-            'code' => 'required|string|unique:products',
+            'productName' => 'required|string|unique:products',
+            'reference' => 'required|string|unique:products',
             'description' => 'required|string',
-            'price' => 'required|integer',
-            'saller_id' => 'required|integer',
-            'sub_category_id' => 'required|integer'
+            'regular_price' => 'required|integer',
+            'categorie_id' => 'required|integer'
         ]);
 
-        if($request->solde && !empty($request->solde)){
-            $data['solde'] =(int)$request->solde;
+        if($request->discount_price && !empty($request->discount_price)){
+            $data['discount_price'] =(int)$request->discount_price;
         }
 
         $data['status']=Product::AVAILABLE_PRODUCT; 
@@ -72,7 +73,7 @@ class ProductController extends ApiController
     {
         try {
             //$res = Product::where('id','=',$id)->with('imageprincipale','children')->get();
-            $res = Product::where('id',$id)->withTrashed()->with('imageprincipale','children')->get();
+            $res = Product::with('categoriy','pictures')->find($id);
             if (!$res) {
                 return $this->errorResponse('Product not found by ID', 400);
             }
@@ -94,7 +95,7 @@ class ProductController extends ApiController
     {
         try {
         //$data = Product::findOrFail($id);
-        $data=Product::withTrashed()->find($id);
+        $data=Product::find($id);
         if ($data->isDirty()) {
             return  $this->errorResponse('Bad request', 400);
         }
@@ -102,32 +103,32 @@ class ProductController extends ApiController
             return  $this->errorResponse('You need to specify a different value to update', 422);
         }
       
-        if ($request->has('name')) {
-            $data->name = $request->name;
+        if ($request->has('productName')) {
+            $data->productName = $request->productName;
         }
-        if ($request->has('code')) {
-            $data->code = (int)$request->code;
+        if ($request->has('reference')) {
+            $data->reference = (int)$request->reference;
         }
 
         if ($request->has('description')) {
             $data->description = $request->description;
         }
+        
         if ($request->has('status')) {
             $data->status = (int)$request->status;
         }
-        if ($request->has('price')) {
-            $data->price = (int)$request->price;
-        }
-        if ($request->has('solde')) {
-            $data->solde = (int)$request->solde;
+
+        if ($request->has('regular_price')) {
+            $data->regular_price = (int)$request->regular_price;
         }
 
-        if ($request->has('seller_id')) {
-            $data->seller_id = (int)$request->seller_id;
+        if ($request->has('discount_price')) {
+            $data->discount_price = (int)$request->discount_price;
         }
-        if ($request->has('deleted_at')) {
-            $data->deleted_at =null;
+        if ($request->has('categorie_id')) {
+            $data->categorie_id = (int)$request->categorie_id;
         }
+      
        
            $data->save();
            return $this->showOne($data);
@@ -147,11 +148,19 @@ class ProductController extends ApiController
     {
         try {
             $data = Product::find($id);
+            $pictures = Picture::where('product_id', $id);
             
             if (!$data) {
                 return $this->errorResponse('Product not found by ID', 400);
             }
-            
+            if ($pictures){
+                foreach ($pictures as $p){
+                    if (File::exists(public_path($p['path']))) {
+                        File::delete(public_path($p['path']));
+                    }
+                }
+            }
+            $pictures->Delete();
             $data->Delete();
            
             return $this->showOne($data);

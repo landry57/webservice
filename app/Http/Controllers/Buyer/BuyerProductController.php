@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Buyer;
 
 use App\Buyer;
 use App\Http\Controllers\ApiController;
-use Illuminate\Http\Request;
+
 
 class BuyerProductController extends ApiController
 {
@@ -15,7 +15,7 @@ class BuyerProductController extends ApiController
      */
     public function index(Buyer $buyer)
     {
-      $products =$buyer->transactions()->with('product','image')
+      $products =$buyer->transactions()->with('product','pictures')
       ->get();
       //->pluck('product');
       return $this->showAll($products);

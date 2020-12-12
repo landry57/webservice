@@ -17,14 +17,16 @@ class CreateTransactionsTable extends Migration
         Schema::create('transactions', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('quantity')->unsigned();
-            $table->integer('id_buyer_fk')->unsigned();
-            $table->integer('id_product_fk')->unsigned();
+            $table->boolean("confirmed")->default(0);
+            $table->double('price');
+            $table->integer('user_id')->unsigned();
+            $table->integer('product_id')->unsigned();
             $table->boolean('status')->default(Transaction::UNDELIVRE);
             $table->timestamps();
           
             
-            $table->foreign('id_buyer_fk')->references('id')->on('users');
-            $table->foreign('id_product_fk')->references('id')->on('products');
+            $table->foreign('user_id')->references('id')->on('users');
+            $table->foreign('product_id')->references('id')->on('products')->onDelete('cascade');
         });
     }
 

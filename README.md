@@ -76,3 +76,25 @@ If you discover a security vulnerability within Laravel, please send an e-mail t
 ## License
 
 The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+
+
+## Clone this repo
+```
+git@gitlab.com:landro2019/apirestballo.git
+```
+
+## Install composer packages
+```
+$ cd apirestballo
+$ composer install
+
+$ php artisan serve
+
+```
+
+## Create and setup .env file
+```
+make a copy of .env.example and rename to .env
+$ php artisan key:generate
+put database credentials in .env file
+```

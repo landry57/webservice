@@ -17,7 +17,7 @@ class PictureController extends ApiController
     */
    public function index()
    {
-       $image = Picture::with('product', 'scateg')->get();
+       $image = Picture::with('category','product')->get();
        return $this->showAll($image);
    }
 
@@ -31,19 +31,19 @@ class PictureController extends ApiController
    {
       
        $data = $request->validate([
-           'img' => 'required|image|mimes:jpeg,png,jpg,gif',
-           'id_product_fk' => 'required|integer',
+           'path' => 'required|image|mimes:jpeg,png,jpg,gif',
+           'product_id' => 'required|integer',
        ]);
 
       
       
-       if ($request->has('img')) {
+       if ($request->has('path')) {
           
-           $files = $request->file('img');
-           $destinationPath = 'images/product/'; // upload path
+           $files = $request->file('path');
+           $destinationPath = 'uploads/product/'; // upload path
            $profilefile = date('YmdHis') . "." . $files->getClientOriginalExtension();
            $files->move($destinationPath, $profilefile);
-           $data['img'] = $destinationPath . "$profilefile";
+           $data['path'] = $destinationPath . "$profilefile";
        }
        try {
            $res = Picture::create($data);
@@ -64,7 +64,7 @@ class PictureController extends ApiController
    public function show($id)
    {
        try {
-           $res = Picture::find($id);
+           $res = Picture::with('category','product')->find($id);
            if (!$res) {
                return $this->errorResponse('Image not found by ID', 400);
            }
@@ -93,16 +93,19 @@ class PictureController extends ApiController
        if (!$request) {
            return  $this->errorResponse('You need to specify a different value to update', 422);
        }
-       if ($files = $request->file('img')) {
-           if (Storage::exists($data['img'])) {
-               File::delete($data['img']);
+       if ($files = $request->file('path')) {
+        if (File::exists(public_path($data['path']))) {
+            File::delete(public_path($data['path']));
+        }
+           if (Storage::exists($data['path'])) {
+               File::delete($data['path']);
            }
 
-           $destinationPath = 'images/product/'; // upload path
+           $destinationPath = 'uploads/product/'; // upload path
 
            $profilefile = date('YmdHis') . "." . $files->getClientOriginalExtension();
            $files->move($destinationPath, $profilefile);
-           $data['img'] = $destinationPath . "$profilefile";
+           $data['path'] = $destinationPath . "$profilefile";
        }
 
        if ($request->has('product_id')) {
@@ -125,8 +128,11 @@ class PictureController extends ApiController
            if (!$data) {
                return $this->errorResponse('Image not found by ID', 400);
            }
-           if (Storage::exists($data['img'])) {
-               File::delete($data['img']);
+           if (File::exists(public_path($data['path']))) {
+            File::delete(public_path($data['path']));
+            }
+           if (Storage::exists($data['path'])) {
+               File::delete($data['path']);
            }
            $data->Delete();
            return $this->showOne($data);
