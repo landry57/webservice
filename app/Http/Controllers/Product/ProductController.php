@@ -58,7 +58,7 @@ class ProductController extends ApiController
             $res = Product::create($data);
             return response()->json(['data' => $res], 201);
         } catch (Exception $e) {
-            return $this->errorResponse('Bad request', 400);
+            return $this->errorResponse('Bad request '.$e, 400);
         }
     
     }

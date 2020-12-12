@@ -17,7 +17,7 @@ class PictureController extends ApiController
     */
    public function index()
    {
-       $image = Picture::with('category','product')->get();
+       $image = Picture::get();
        return $this->showAll($image);
    }
 
@@ -64,7 +64,7 @@ class PictureController extends ApiController
    public function show($id)
    {
        try {
-           $res = Picture::with('category','product')->find($id);
+           $res = Picture::find($id);
            if (!$res) {
                return $this->errorResponse('Image not found by ID', 400);
            }

@@ -16,7 +16,7 @@ namespace PHPUnit\Util;
 final class VersionComparisonOperator
 {
     /**
-     * @var '<'|'lt'|'<='|'le'|'>'|'gt'|'>='|'ge'|'=='|'='|'eq'|'!='|'<>'|'ne'
+     * @psalm-var '<'|'lt'|'<='|'le'|'>'|'gt'|'>='|'ge'|'=='|'='|'eq'|'!='|'<>'|'ne'
      */
     private $operator;
 
@@ -42,7 +42,7 @@ final class VersionComparisonOperator
      */
     private function ensureOperatorIsValid(string $operator): void
     {
-        if (!\in_array($operator, ['<', 'lt', '<=', 'le', '>', 'gt', '>=', 'ge', '==', '=', 'eq', '!=', '<>', 'ne'])) {
+        if (!\in_array($operator, ['<', 'lt', '<=', 'le', '>', 'gt', '>=', 'ge', '==', '=', 'eq', '!=', '<>', 'ne'], true)) {
             throw new Exception(
                 \sprintf(
                     '"%s" is not a valid version_compare() operator',

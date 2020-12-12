@@ -2,6 +2,7 @@
 
 namespace Laravel\Passport\Bridge;
 
+use Illuminate\Contracts\Hashing\Hasher;
 use Illuminate\Hashing\HashManager;
 use League\OAuth2\Server\Entities\ClientEntityInterface;
 use League\OAuth2\Server\Repositories\UserRepositoryInterface;
@@ -36,16 +37,6 @@ class UserRepository implements UserRepositoryInterface
 
         if (is_null($model = config('auth.providers.'.$provider.'.model'))) {
             throw new RuntimeException('Unable to determine authentication model from configuration.');
-        }
-
-        if (method_exists($model, 'findAndValidateForPassport')) {
-            $user = (new $model)->findAndValidateForPassport($username, $password);
-
-            if (! $user) {
-                return;
-            }
-
-            return new User($user->getAuthIdentifier());
         }
 
         if (method_exists($model, 'findForPassport')) {

@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Str;
 use Laravolt\Avatar\Facade as Avatar;
 
 class UserController extends ApiController
@@ -50,13 +51,13 @@ class UserController extends ApiController
         ]);
         $avatar = '';
         if ($files = $request->file('avatar')) {
-            $destinationPath = 'images/avatar/'; // upload path
+            $destinationPath = 'uploads/avatar/'; // upload path
             $profilefile = date('YmdHis') . "." . $files->getClientOriginalExtension();
             $files->move($destinationPath, $profilefile);
             $avatar = $destinationPath . "$profilefile";
         }
 
-        $link ='uploads/avatar/'.date('YmdHis') . '.avatar.png';
+        $link ='uploads/avatars/'.date('YmdHis') . '.avatar.png';
         //$link ='uploads/avatar20201031140617.file.png';
          Avatar::create(User::getNameAttribute($request->fullname))->save($link, $quality = 100);
         
@@ -67,7 +68,7 @@ class UserController extends ApiController
             'admin' => User::REGULAR_USER,
             'avatar' =>  $avatar ? $avatar : $link,
             'password' => bcrypt($request->password),
-            'activation_token' => str_random(60)
+            'activation_token' =>  str::random(60)
         ]);
         $user->save();
         $user->notify(new SignupActivate($user));
@@ -183,7 +184,7 @@ class UserController extends ApiController
         ]);
         $credentials = request(['email', 'password']);
         $credentials['status'] = 1;
-        $credentials['deleted_at'] = null;
+      
         if (!Auth::attempt($credentials))
             return $this->errorResponse('Unauthorized', 401);
 

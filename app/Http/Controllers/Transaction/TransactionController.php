@@ -3,11 +3,9 @@
 namespace App\Http\Controllers\Transaction;
 
 use App\Http\Controllers\ApiController;
-use App\Product_SubCategory;
-use App\Secteur;
 use App\Transaction;
 use App\User;
-use Exception;
+
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;

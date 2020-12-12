@@ -13,8 +13,10 @@
         "guzzlehttp/guzzle": "^6.5",
         "laravel/framework": "^6.2",
         "laravel/helpers": "^1.2",
-        "laravel/passport": "^8.4",
+        "laravel/passport": "8",
         "laravel/tinker": "^2.0",
+        "lcobucci/jwt": "3.3.3",
+        "laravolt/avatar": "^4.0",
         "nesbot/carbon": "^2.32",
         "snowfire/beautymail": "dev-master"
     },
